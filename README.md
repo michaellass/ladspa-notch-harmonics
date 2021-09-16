@@ -32,7 +32,6 @@ You can use PulseAudio's `module-ladspa-sink` module to implement real time filt
 pacmd load-module module-null-sink sink_name=mic_denoised_out sink_properties=device.description=Denoised_Microphone_AsSink
 pacmd load-module module-ladspa-sink sink_name=mic_raw_in sink_master=mic_denoised_out label=notch_harmonics plugin=/usr/local/lib/ladspa/notch_harmonics_5761.so control=,
 pacmd load-module module-loopback source=<your_mic_name> sink=mic_raw_in
-
 ```
 Using the `control=<base freq>,<no harmonics>` argument, you can set base frequency and number of harmonics to remove from the audio stream. If one or both arguments are left out, the corresponding defaults are used (`control=1000,12`). `<your_mic_name>` can be determined by running `pacmd list-sources`.
 
