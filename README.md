@@ -1,5 +1,7 @@
 # ladspa-notch-harmonics
 
+[![CI](https://github.com/michaellass/ladspa-notch-harmonics/actions/workflows/ci.yml/badge.svg)](https://github.com/michaellass/ladspa-notch-harmonics/actions/workflows/ci.yml)
+
 This [LADSPA](https://www.ladspa.org/) plugin implements narrow notch filters at a specified base frequency and a specified number of harmonics.
 
 Originally this plugin has been developed to block frequencies at 1 kHz and corresponding harmonics. This kind of noise is often observed in USB microphones due to cross talk between data and power lines in USB cables (a phenomenon called *USB whine*, *Frying Mosquitoes* or *Yeti Curse*) [[1]](https://0xstubs.org/understanding-usb-microphone-whine/). However, base frequency and the number of harmonics are configurable via the control ports of the plugin so that other scenarios can be handled (e.g., blocking 50/60 Hz noise or interference caused by external devices). By default, a maximum of 23 harmonics can be blocked. This limit can easily be changed in the source code to handle more demanding use cases.
