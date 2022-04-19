@@ -1,6 +1,6 @@
 # ladspa-notch-harmonics
 
-[![CI](https://github.com/michaellass/ladspa-notch-harmonics/actions/workflows/ci.yml/badge.svg)](https://github.com/michaellass/ladspa-notch-harmonics/actions/workflows/ci.yml)
+[![CI](https://github.com/michaellass/ladspa-notch-harmonics/workflows/CI/badge.svg)](https://github.com/michaellass/ladspa-notch-harmonics/actions/workflows/ci.yml)
 
 This [LADSPA](https://www.ladspa.org/) plugin implements narrow notch filters at a specified base frequency and a specified number of harmonics.
 
