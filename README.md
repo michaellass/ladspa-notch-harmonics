@@ -43,8 +43,45 @@ pacmd load-module module-remap-source source_name=mic_denoised_in master=mic_den
 ```
 and then use `Denoised_Microphone_AsSource` as input device‌.
 
-## Real time filtering using Pipewire
-It should be easily possible to use this plugin with Pipewire, similar to https://github.com/werman/noise-suppression-for-voice. However, so far this has not been tested. If it works for you, please file a pull request or a bug report so that we can include specific instructions here.
+## Real time filtering using PipeWire
+You can also use PipeWire to apply this filter in real time to your microphone input.
+
+1. Create config directory in your user's home: `~/.config/pipewire/pipewire.conf.d/`
+2. Create configuration file `~/.config/pipewire/pipewire.conf.d/99-input-notch-harmonics.conf` with the following contents:
+    ```
+    context.modules = [
+    {   name = libpipewire-module-filter-chain
+        args = {
+            node.description =  "Notch Harmonics source"
+            media.name =  "Notch Harmonics source"
+            filter.graph = {
+                nodes = [
+                    {
+                        type = ladspa
+                        name = notch_harmonics
+                        plugin = /usr/local/lib/ladspa/notch_harmonics_5761.so
+                        label = notch_harmonics
+                        control = {
+                            "Base frequency" = 1000
+                            "Number of harmonics" = 12
+                        }
+                    }
+                ]
+            }
+            capture.props = {
+                node.name =  "capture.notch_harmonics"
+                node.passive = true
+            }
+            playback.props = {
+                node.name =  "notch_harmonics"
+                media.class = Audio/Source
+            }
+        }
+    }
+    ]
+    ```
+3. Restart PipeWire: `systemctl restart --user pipewire.service`
+4. Select `Notch Harmonics source` as input device
 
 ## License
 
