@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Michael Lass
+ * Copyright (c) 2021-2022 Michael Lass
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -158,7 +158,7 @@ static void runFilter(LADSPA_Handle Instance, unsigned long SampleCount) {
 
 static void cleanupFilter(LADSPA_Handle Instance) { free(Instance); }
 
-LADSPA_Descriptor *descriptor = NULL;
+static LADSPA_Descriptor *descriptor = NULL;
 
 static void __attribute__((constructor)) init() {
 
@@ -174,7 +174,7 @@ static void __attribute__((constructor)) init() {
   descriptor->Name =
       strdup("Multiple notch filters placed at harmonics of a base frequency.");
   descriptor->Maker = strdup("Michael Lass");
-  descriptor->Copyright = strdup("2021 Michael Lass, MIT License");
+  descriptor->Copyright = strdup("2021-2022 Michael Lass, MIT License");
   descriptor->PortCount = 4;
 
   portDescriptors =
