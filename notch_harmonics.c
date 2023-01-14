@@ -51,6 +51,10 @@ typedef struct {
 typedef struct {
   LADSPA_Data *inputBuffer;
   LADSPA_Data *outputBuffer;
+  LADSPA_Data *freq_ptr;
+  LADSPA_Data *stages_ptr;
+  LADSPA_Data cur_freq;
+  LADSPA_Data cur_stages;
   LADSPA_Data freq;
   LADSPA_Data sampleRate;
   int nstages;
@@ -84,8 +88,10 @@ static LADSPA_Handle instantiateFilter(const LADSPA_Descriptor *Descriptor,
   Filter *filt = malloc(sizeof(Filter));
 
   filt->freq = 1000;
+  filt->cur_freq = 1000;
   filt->sampleRate = SampleRate;
   filt->nstages = 12;
+  filt->cur_stages = 12;
   updateParameters(filt);
 
   return filt;
@@ -104,16 +110,10 @@ static void connectPortToFilter(LADSPA_Handle Instance, unsigned long Port,
     filt->outputBuffer = DataLocation;
     break;
   case IO_FREQ:
-    filt->freq = *DataLocation;
-    updateParameters(filt);
+    filt->freq_ptr = DataLocation;
     break;
   case IO_NHARMONICS:
-    filt->nstages = (int)*DataLocation;
-    if (filt->nstages < 1)
-      filt->nstages = 1;
-    if (filt->nstages > MAX_STAGES)
-      filt->nstages = MAX_STAGES;
-    updateParameters(filt);
+    filt->stages_ptr = DataLocation;
     break;
   }
 }
@@ -121,6 +121,31 @@ static void connectPortToFilter(LADSPA_Handle Instance, unsigned long Port,
 static void runFilter(LADSPA_Handle Instance, unsigned long SampleCount) {
 
   Filter *filt = (Filter *)Instance;
+
+  if (*filt->freq_ptr != filt->cur_freq) {
+    filt->cur_freq = *filt->freq_ptr;
+    filt->freq = filt->cur_freq;
+    if (filt->freq < 50) {
+      filt->freq = 50;
+    }
+    if (filt->freq > 20000) {
+      filt->freq = 20000;
+    }
+    updateParameters(filt);
+  }
+
+  if (*filt->stages_ptr != filt->cur_stages) {
+    filt->cur_stages = *filt->stages_ptr;
+    filt->nstages = (int)filt->cur_stages;
+    if (filt->nstages < 1) {
+      filt->nstages = 1;
+    }
+    if (filt->nstages > MAX_STAGES) {
+      filt->nstages = MAX_STAGES;
+    }
+    updateParameters(filt);
+  }
+
   LADSPA_Data *input = filt->inputBuffer;
   LADSPA_Data *output = filt->outputBuffer;
 
