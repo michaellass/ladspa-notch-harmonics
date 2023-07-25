@@ -71,6 +71,8 @@ You can also use PipeWire to apply this filter in real time to your microphone i
             capture.props = {
                 node.name =  "capture.notch_harmonics"
                 node.passive = true
+                # You can explicitly specify the audio source using a line like the following:
+                # target.object = "alsa_input.usb-Samson_Technologies_Samson_Meteor_Mic-00.analog-stereo"
             }
             playback.props = {
                 node.name =  "notch_harmonics"
