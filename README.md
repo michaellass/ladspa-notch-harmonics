@@ -46,6 +46,8 @@ and then use `Denoised_Microphone_AsSource` as input device‌.
 ## Real time filtering using PipeWire
 You can also use PipeWire to apply this filter in real time to your microphone input.
 
+**IMPORTANT:** Since version 1.6.3 of Pipewire, plugins are only loaded if they are located within the default search path. Hence, you either need to install ladspa-notch-harmonics to `/usr/lib/ladspa` or add `/usr/local/lib/ladspa` to `$LADSPA_PATH`. Refer to [issue #6](https://github.com/michaellass/ladspa-notch-harmonics/issues/6) for more information.
+
 1. Create config directory in your user's home: `~/.config/pipewire/pipewire.conf.d/`
 2. Create configuration file `~/.config/pipewire/pipewire.conf.d/99-input-notch-harmonics.conf` with the following contents:
     ```
